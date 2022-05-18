@@ -16,25 +16,27 @@ async function handleRequest (request) {
     const channel = pathname.split('/')?.[2]?.split('.')?.[0]
 
     if (channel !== '') {
-      const url = `https://youtube.com/channel/${channel}/live`
+      const url = `https://www.youtube.com/channel/${channel}/live`
       const response = await fetch(url)
 
       if (response.ok) {
         const text = await response.text()
         const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/g)
 
-        const data = {
-          channel,
-          stream
-        }
+        // const data = {
+        //   channel,
+        //   stream
+        // }
 
-        const json = JSON.stringify(data, null, 2)
+        // const json = JSON.stringify(data, null, 2)
 
-        return new Response(json, {
-          headers: {
-            'content-type': 'application/json;charset=UTF-8'
-          }
-        })
+        // return new Response(json, {
+        //   headers: {
+        //     'content-type': 'application/json;charset=UTF-8'
+        //   }
+        // })
+
+        return Response.redirect(stream, 302)
       } else {
         throw Error(`Youtube URL (${url}) failed with status: ${response.status}`)
       }
