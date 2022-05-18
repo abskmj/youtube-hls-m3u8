@@ -1,0 +1,3 @@
+name = "hls"
+main = "src/worker.js"
+compatibility_date = "2022-05-15"
