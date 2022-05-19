@@ -1,19 +1,19 @@
 #EXTM3U x-tvg-url="https://github.com/botallen/epg/releases/download/latest/epg.xml"
 
-#EXTINF:-1 group-title="News" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQRJiELJWT983TxaxQ8nKgVGP4jgWTvqTaOUFekrB0=s88-c-k-c0x00ffffff-no-rj" tvg-id="", Aaj Tak
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="Hindi" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQRJiELJWT983TxaxQ8nKgVGP4jgWTvqTaOUFekrB0" tvg-id="", Aaj Tak
 https://hls.youtb.workers.dev/channel/UCt4t-jeY85JegMlZ-E5UWtA.m3u8
 
-#EXTINF:-1 group-title="News" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQ5U-RWZZWrWBgS5imVahjSmIJpb21BW3Rwwd1XTw=s88-c-k-c0x00ffffff-no-rj" tvg-id="", WION
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="English" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQ5U-RWZZWrWBgS5imVahjSmIJpb21BW3Rwwd1XTw" tvg-id="", WION
 https://hls.youtb.workers.dev/channel/UC_gUM8rL-Lrg6O3adPW9K1g.m3u8
 
-#EXTINF:-1 group-title="News" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLSgRTYyhZKf1NGma__2qf_oa1eJfyLHkSHx9FIHfg=s88-c-k-c0x00ffffff-no-rj" tvg-id="", OTV
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="Odia" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLSgRTYyhZKf1NGma__2qf_oa1eJfyLHkSHx9FIHfg" tvg-id="", OTV
 https://hls.youtb.workers.dev/channel/UCCgLMMp4lv7fSD2sBz1Ai6Q.m3u8
 
-#EXTINF:-1 group-title="News" tvg-logo="https://yt3.ggpht.com/y5S847YDNlDZNUUk3xmEfVMUDu2XSe0yAU_qvIpbwKi5VgIYQQc3FGeOANbgu-36sBEDpAwDAQ=s88-c-k-c0x00ffffff-no-rj" tvg-id="", India TV
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="Hindi" tvg-logo="https://yt3.ggpht.com/y5S847YDNlDZNUUk3xmEfVMUDu2XSe0yAU_qvIpbwKi5VgIYQQc3FGeOANbgu-36sBEDpAwDAQ" tvg-id="", India TV
 https://hls.youtb.workers.dev/channel/UCttspZesZIDEwwpVIgoZtWQ.m3u8
 
-#EXTINF:-1 group-title="News" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQ8kKijuHJ7kY9prcuIXQ1Aht4yznFzAZe-jleevQw=s88-c-k-c0x00ffffff-no-rj" tvg-id="", Zee News
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="Hindi" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQ8kKijuHJ7kY9prcuIXQ1Aht4yznFzAZe-jleevQw" tvg-id="", Zee News
 https://hls.youtb.workers.dev/channel/UCIvaYmXn910QMdemBG3v1pQ.m3u8
 
-#EXTINF:-1 group-title="News" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLRUToLipy4MP82mnh40IvVCb4gOykJssP3S4anLCcE=s88-c-k-c0x00ffffff-no-rj" tvg-id="", ABP News
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="Hindi" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLRUToLipy4MP82mnh40IvVCb4gOykJssP3S4anLCcE" tvg-id="", ABP News
 https://hls.youtb.workers.dev/channel/UCRWFSbif-RFENbBrSiez1DA.m3u8
