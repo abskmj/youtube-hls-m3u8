@@ -17,3 +17,9 @@ https://hls.youtb.workers.dev/channel/UCIvaYmXn910QMdemBG3v1pQ.m3u8
 
 #EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="Hindi" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLRUToLipy4MP82mnh40IvVCb4gOykJssP3S4anLCcE" tvg-id="", ABP News
 https://hls.youtb.workers.dev/channel/UCRWFSbif-RFENbBrSiez1DA.m3u8
+
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="Hindi" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQtlX3rWNbvBfc9eOCnu5jajwWVrxwe9NvqtLBB1w" tvg-id="", DD News
+https://hls.youtb.workers.dev/channel/UCKwucPzHZ7zCUIf7If-Wo1g.m3u8
+
+#EXTINF:-1 group-title="News" tvg-country="IN" tvg-language="English" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLTp8egInu6rUWvlKwjpK0ybQBXaq8d26vo59KS8rg tvg-id="", DD India
+https://hls.youtb.workers.dev/channel/UCGDQNvybfDDeGTf4GtigXaw.m3u8
