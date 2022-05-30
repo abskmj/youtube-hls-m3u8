@@ -17,24 +17,17 @@ async function handleRequest (request) {
 
     if (channel !== '') {
       const url = `https://www.youtube.com/channel/${channel}/live`
-      const response = await fetch(url)
+
+      const response = await fetch(url, {
+        cf: {
+          cacheTtl: 10800, // 3 hours
+          cacheEverything: true
+        }
+      })
 
       if (response.ok) {
         const text = await response.text()
         const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/g)
-
-        // const data = {
-        //   channel,
-        //   stream
-        // }
-
-        // const json = JSON.stringify(data, null, 2)
-
-        // return new Response(json, {
-        //   headers: {
-        //     'content-type': 'application/json;charset=UTF-8'
-        //   }
-        // })
 
         return Response.redirect(stream, 302)
       } else {
