@@ -8,9 +8,10 @@ const getLiveStream = async (url) => {
 
   if (response.ok) {
     const text = await response.text()
-    const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/g)
+    const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/g)?.[0]
+    const name = text.match(/(?<=channelName":")[^\"]*/g)?.[0]
 
-    return stream?.[0]
+    return { name, stream }
   } else {
     throw Error(`Youtube URL (${url}) failed with status: ${response.status}`)
   }
@@ -34,7 +35,12 @@ app.get('/channel/:id.m3u8', async (req, res, nxt) => {
     })
 
     const url = `https://www.youtube.com/channel/${req.params.id}/live`
-    const stream = await getLiveStream(url)
+    const { name, stream } = await getLiveStream(url)
+
+    track({
+      name: 'feed',
+      params: { name }
+    })
 
     res.redirect(stream)
   } catch (err) {
@@ -50,7 +56,12 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
     })
 
     const url = `https://www.youtube.com/watch?v=${req.params.id}`
-    const stream = await getLiveStream(url)
+    const { name, stream } = await getLiveStream(url)
+
+    track({
+      name: 'feed',
+      params: { name }
+    })
 
     res.redirect(stream)
   } catch (err) {
