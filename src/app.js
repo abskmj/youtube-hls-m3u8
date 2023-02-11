@@ -19,12 +19,12 @@ const getLiveStream = async (url) => {
   }
 }
 
-const track = async (user_id, user, event) => {
+const track = async (userId, user, event) => {
   await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
     method: 'POST',
     body: JSON.stringify({
       client_id: process.env.GA_CLIENT_ID,
-      user_id,
+      user_id: userId,
       user_properties: user,
       events: [event]
     })
@@ -33,9 +33,12 @@ const track = async (user_id, user, event) => {
 
 app.use((req, res, nxt) => {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+
+  console.log('address:', ip, req.headers['x-forwarded-for'], req.socket.remoteAddress)
+
   req.user_id = crypto.createHash('sha256').update(ip).digest('hex')
 
-  geo = geoip.lookup(ip)
+  const geo = geoip.lookup(ip)
 
   req.user = {
     country: geo.country,
