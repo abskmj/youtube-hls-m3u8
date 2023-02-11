@@ -32,18 +32,14 @@ const track = async (userId, user, event) => {
 }
 
 app.use((req, res, nxt) => {
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+  req.user_id = crypto.createHash('sha256').update(req.ip).digest('hex')
 
-  console.log('address:', ip, req.headers['x-forwarded-for'], req.socket.remoteAddress)
-
-  req.user_id = crypto.createHash('sha256').update(ip).digest('hex')
-
-  const geo = geoip.lookup(ip)
+  const geo = geoip.lookup(req.ip)
 
   req.user = {
-    country: geo.country,
-    city: geo.city,
-    timezone: geo.timezone
+    country: geo?.country,
+    city: geo?.city,
+    timezone: geo?.timezone
   }
 
   nxt()
