@@ -1,6 +1,7 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const crypto = require('crypto')
+const geoip = require('geoip-lite')
 
 const app = express()
 
@@ -18,12 +19,13 @@ const getLiveStream = async (url) => {
   }
 }
 
-const track = async (user, event) => {
+const track = async (user_id, user, event) => {
   await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
     method: 'POST',
     body: JSON.stringify({
       client_id: process.env.GA_CLIENT_ID,
-      user_id: user,
+      user_id,
+      user_properties: user,
       events: [event]
     })
   })
@@ -31,7 +33,16 @@ const track = async (user, event) => {
 
 app.use((req, res, nxt) => {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-  req.user = crypto.createHash('sha256').update(ip).digest('hex')
+  req.user_id = crypto.createHash('sha256').update(ip).digest('hex')
+
+  geo = geoip.lookup(ip)
+
+  req.user = {
+    country: geo.country,
+    city: geo.city,
+    timezone: geo.timezone
+  }
+
   nxt()
 })
 
@@ -40,7 +51,7 @@ app.get('/channel/:id.m3u8', async (req, res, nxt) => {
     const url = `https://www.youtube.com/channel/${req.params.id}/live`
     const { name, stream } = await getLiveStream(url)
 
-    track(req.user, {
+    track(req.user_id, req.user, {
       name: 'feed',
       params: {
         engagement_time_msec: '1',
@@ -59,7 +70,7 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
     const url = `https://www.youtube.com/watch?v=${req.params.id}`
     const { name, stream } = await getLiveStream(url)
 
-    track(req.user, {
+    track(req.user_id, req.user, {
       name: 'feed',
       params: {
         engagement_time_msec: '1',
