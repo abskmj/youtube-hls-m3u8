@@ -1,7 +1,6 @@
 const express = require('express')
 const fetch = require('node-fetch')
 const crypto = require('crypto')
-const geoip = require('geoip-lite')
 
 const app = express()
 
@@ -19,35 +18,29 @@ const getLiveStream = async (url) => {
   }
 }
 
-const track = async (userId, user, event) => {
-  console.log('track:', userId, user, event)
+const track = async (user, event) => {
+  console.log('track:', user, event)
 
   await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
     method: 'POST',
     body: JSON.stringify({
       client_id: process.env.GA_CLIENT_ID,
-      user_id: userId,
-      user_properties: user,
+      user_id: user.id,
+      user_properties: user.properties,
       events: [event]
     })
   })
 }
 
 app.use((req, res, nxt) => {
-  console.log('item:', req.ip)
-  console.log('items:', req.ips)
   console.log('headers:', req.headers)
 
-  req.user_id = crypto.createHash('sha256').update(req.ip).digest('hex')
-
-  const geo = geoip.lookup(req.ip)
-
-  console.log('geo:', geo)
-
   req.user = {
-    country: geo?.country,
-    city: geo?.city,
-    timezone: geo?.timezone
+    id: crypto.createHash('sha256').update(req.headers['cf-connecting-ip']).digest('hex'),
+    properties: {
+      country: req.headers['cf-ipcountry'],
+      ua: req.headers['user-agent']
+    }
   }
 
   nxt()
@@ -58,7 +51,7 @@ app.get('/channel/:id.m3u8', async (req, res, nxt) => {
     const url = `https://www.youtube.com/channel/${req.params.id}/live`
     const { name, stream } = await getLiveStream(url)
 
-    track(req.user_id, req.user, {
+    track(req.user, {
       name: 'feed',
       params: {
         engagement_time_msec: '1',
@@ -77,7 +70,7 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
     const url = `https://www.youtube.com/watch?v=${req.params.id}`
     const { name, stream } = await getLiveStream(url)
 
-    track(req.user_id, req.user, {
+    track(req.user, {
       name: 'feed',
       params: {
         engagement_time_msec: '1',
