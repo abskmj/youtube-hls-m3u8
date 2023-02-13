@@ -26,8 +26,10 @@ const track = async (user, event) => {
     body: JSON.stringify({
       client_id: process.env.GA_CLIENT_ID,
       user_id: user.id,
-      user_properties: user.properties,
-      events: [event]
+      events: [event, {
+        name: 'client',
+        params: user.properties
+      }]
     })
   })
 }
@@ -36,7 +38,7 @@ app.use((req, res, nxt) => {
   console.log('headers:', req.headers)
 
   req.user = {
-    id: crypto.createHash('sha256').update(req.headers['cf-connecting-ip']).digest('hex'),
+    id: crypto.createHash('sha256').update(req.headers['cf-connecting-ip'] || req.ip).digest('hex'),
     properties: {
       country: req.headers['cf-ipcountry'],
       ua: req.headers['user-agent']
