@@ -18,7 +18,7 @@ const getLiveStream = async (url) => {
 }
 
 const track = async (user, event) => {
-  console.log('track:', user, event)
+  // console.log('track:', user, event)
 
   await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
     method: 'POST',
@@ -34,7 +34,7 @@ const track = async (user, event) => {
 }
 
 app.use((req, res, nxt) => {
-  console.log('headers:', req.headers)
+  // console.log('headers:', req.headers)
 
   req.user = {
     id: req.headers['cf-connecting-ip'] || req.ip,
@@ -86,5 +86,6 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
 })
 
 app.listen(3000, () => {
-  console.log('Listen on the port 3000...')
+  console.log('express app is running on port 3000')
+  console.log(process.version)
 })
