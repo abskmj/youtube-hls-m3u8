@@ -1,6 +1,5 @@
 const express = require('express')
 const fetch = require('node-fetch')
-const crypto = require('crypto')
 
 const app = express()
 
@@ -38,7 +37,7 @@ app.use((req, res, nxt) => {
   console.log('headers:', req.headers)
 
   req.user = {
-    id: crypto.createHash('sha256').update(req.headers['cf-connecting-ip'] || req.ip).digest('hex'),
+    id: req.headers['cf-connecting-ip'] || req.ip,
     properties: {
       country: req.headers['cf-ipcountry'],
       ua: req.headers['user-agent']
