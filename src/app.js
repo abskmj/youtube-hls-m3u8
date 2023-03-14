@@ -33,6 +33,8 @@ const track = async (user, event) => {
   })
 }
 
+app.use(require('express-status-monitor')())
+
 app.use((req, res, nxt) => {
   // console.log('headers:', req.headers)
 
