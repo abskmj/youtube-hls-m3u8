@@ -102,7 +102,8 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
 
 app.get('/cache', async (req, res, nxt) => {
   try {
-    const keys = cache.keys('*')
+    const keys = await cache.keys('*')
+    console.log('Keys:', keys)
 
     const items = keys.map(async (key) => {
       const data = await cache.get(key)
