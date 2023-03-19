@@ -100,6 +100,25 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
   }
 })
 
+app.get('/cache', async (req, res, nxt) => {
+  try {
+    const keys = cache.keys('*')
+
+    const items = keys.map(async (key) => {
+      const data = await cache.get(key)
+
+      return {
+        url: key,
+        name: (JSON.parse(data)).name
+      }
+    })
+
+    res.json(items)
+  } catch (err) {
+    nxt(err)
+  }
+})
+
 app.listen(3000, () => {
   console.log('express app is running on port 3000')
   console.log(process.version)
