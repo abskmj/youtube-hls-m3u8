@@ -1,19 +1,32 @@
 const express = require('express')
 const fetch = require('node-fetch')
 
+const cache = require('./cache')
+
 const app = express()
 
 const getLiveStream = async (url) => {
-  const response = await fetch(url)
+  const data = await JSON.parse(cache.get(url))
 
-  if (response.ok) {
-    const text = await response.text()
-    const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/g)?.[0]
-    const name = text.match(/(?<=channelName":")[^"]*/g)?.[0]
-
-    return { name, stream }
+  if (data) {
+    console.log('using data from cache:', url)
+    return data
   } else {
-    throw Error(`Youtube URL (${url}) failed with status: ${response.status}`)
+    const response = await fetch(url)
+
+    if (response.ok) {
+      const text = await response.text()
+      const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/g)?.[0]
+      const name = text.match(/(?<=channelName":")[^"]*/g)?.[0]
+
+      const data = { name, stream }
+
+      cache.set(url, JSON.stringify(data), 'EX', 300)
+
+      return data
+    } else {
+      throw Error(`Youtube URL (${url}) failed with status: ${response.status}`)
+    }
   }
 }
 
