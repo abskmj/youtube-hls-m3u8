@@ -6,11 +6,11 @@ const cache = require('./cache')
 const app = express()
 
 const getLiveStream = async (url) => {
-  const data = await JSON.parse(cache.get(url))
+  const data = await cache.get(url)
 
   if (data) {
     console.log('using data from cache:', url)
-    return data
+    return JSON.parse(data)
   } else {
     const response = await fetch(url)
 
