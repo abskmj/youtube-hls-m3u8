@@ -9,7 +9,7 @@ const getLiveStream = async (url) => {
   const data = await cache.get(url)
 
   if (data) {
-    console.log('using data from cache:', url)
+    // console.log('using data from cache:', url)
     return JSON.parse(data)
   } else {
     const response = await fetch(url)
@@ -21,7 +21,7 @@ const getLiveStream = async (url) => {
 
       const data = { name, stream }
 
-      cache.set(url, JSON.stringify(data), 'EX', 300)
+      await cache.set(url, JSON.stringify(data), { EX: 300 })
 
       return data
     } else {
