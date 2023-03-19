@@ -105,14 +105,16 @@ app.get('/cache', async (req, res, nxt) => {
     const keys = await cache.keys('*')
     console.log('Keys:', keys)
 
-    const items = keys.map(async (key) => {
+    const items = []
+
+    for (const key of keys) {
       const data = await cache.get(key)
 
-      return {
+      items.push({
         url: key,
         name: (JSON.parse(data)).name
-      }
-    })
+      })
+    }
 
     res.json(items)
   } catch (err) {
