@@ -16,14 +16,19 @@ const getLiveStream = async (url) => {
 
     if (response.ok) {
       const text = await response.text()
-      const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/g)?.[0]
-      const name = text.match(/(?<=channelName":")[^"]*/g)?.[0]
+      const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/)?.[0]
+      const name = text.match(/(?<=channelName":")[^"]*/)?.[0]
+      const logo = text.match(/(?<=owner":{"videoOwnerRenderer":{"thumbnail":{"thumbnails":\[{"url":")[^=]*/)?.[0]
 
-      const data = { name, stream }
+      if (stream) {
+        const data = { name, stream, logo }
 
-      await cache.set(url, JSON.stringify(data), { EX: 300 })
+        await cache.set(url, JSON.stringify(data), { EX: 300 })
 
-      return data
+        return data
+      } else {
+        throw Error(`Stream not found for Youtube URL: ${url}`)
+      }
     } else {
       throw Error(`Youtube URL (${url}) failed with status: ${response.status}`)
     }
@@ -108,11 +113,12 @@ app.get('/cache', async (req, res, nxt) => {
     const items = []
 
     for (const key of keys) {
-      const data = await cache.get(key)
+      const data = JSON.parse(await cache.get(key))
 
       items.push({
         url: key,
-        name: (JSON.parse(data)).name
+        name: data.name,
+        logo: data.logo
       })
     }
 
