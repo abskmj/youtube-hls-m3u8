@@ -6,12 +6,12 @@ const cache = require('./cache')
 const app = express()
 
 const getLiveStream = async (url) => {
-  const data = await cache.get(url)
+  let data = await cache.get(url)
 
   if (data) {
-    // console.log('using data from cache:', url)
     return JSON.parse(data)
   } else {
+    data = {}
     const response = await fetch(url)
 
     if (response.ok) {
@@ -20,18 +20,12 @@ const getLiveStream = async (url) => {
       const name = text.match(/(?<=channelName":")[^"]*/)?.[0]
       const logo = text.match(/(?<=owner":{"videoOwnerRenderer":{"thumbnail":{"thumbnails":\[{"url":")[^=]*/)?.[0]
 
-      if (stream) {
-        const data = { name, stream, logo }
-
-        await cache.set(url, JSON.stringify(data), { EX: 300 })
-
-        return data
-      } else {
-        throw Error(`Stream not found for Youtube URL: ${url}`)
-      }
-    } else {
-      throw Error(`Youtube URL (${url}) failed with status: ${response.status}`)
+      data = { name, stream, logo }
     }
+
+    await cache.set(url, JSON.stringify(data), { EX: 300 })
+
+    return data
   }
 }
 
@@ -80,7 +74,11 @@ app.get('/channel/:id.m3u8', async (req, res, nxt) => {
       }
     })
 
-    res.redirect(stream)
+    if (stream) {
+      res.redirect(stream)
+    } else {
+      res.sendStatus(404)
+    }
   } catch (err) {
     nxt(err)
   }
@@ -99,7 +97,11 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
       }
     })
 
-    res.redirect(stream)
+    if (stream) {
+      res.redirect(stream)
+    } else {
+      res.sendStatus(404)
+    }
   } catch (err) {
     nxt(err)
   }
