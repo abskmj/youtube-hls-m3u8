@@ -117,11 +117,13 @@ app.get('/cache', async (req, res, nxt) => {
     for (const key of keys) {
       const data = JSON.parse(await cache.get(key))
 
-      items.push({
-        url: key,
-        name: data.name,
-        logo: data.logo
-      })
+      if (data) {
+        items.push({
+          url: key,
+          name: data.name,
+          logo: data.logo
+        })
+      }
     }
 
     res.json(items)
