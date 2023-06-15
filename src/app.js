@@ -28,14 +28,13 @@ const getLiveStream = async (url) => {
     return data
   }
 }
+const { GA_MEASUREMENT_ID, GA_API_SECRET, GA_CLIENT_ID } = process.env
 
-const track = async (user, event) => {
-  // console.log('track:', user, event)
-
-  await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
+const track = (user, event) => {
+  return fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`, {
     method: 'POST',
     body: JSON.stringify({
-      client_id: process.env.GA_CLIENT_ID,
+      client_id: GA_CLIENT_ID,
       user_id: user.id,
       events: [event, {
         name: 'client',
@@ -66,7 +65,7 @@ app.get('/channel/:id.m3u8', async (req, res, nxt) => {
     const url = `https://www.youtube.com/channel/${req.params.id}/live`
     const { name, stream } = await getLiveStream(url)
 
-    track(req.user, {
+    await track(req.user, {
       name: 'feed',
       params: {
         engagement_time_msec: '1',
@@ -89,7 +88,7 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
     const url = `https://www.youtube.com/watch?v=${req.params.id}`
     const { name, stream } = await getLiveStream(url)
 
-    track(req.user, {
+    await track(req.user, {
       name: 'feed',
       params: {
         engagement_time_msec: '1',
