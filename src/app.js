@@ -82,7 +82,7 @@ app.get('/channel/:id.m3u8', async (req, res, nxt) => {
     if (stream) {
       res.redirect(stream)
     } else {
-      res.sendStatus(404)
+      res.sendStatus(204)
     }
   } catch (err) {
     nxt(err)
@@ -105,7 +105,7 @@ app.get('/video/:id.m3u8', async (req, res, nxt) => {
     if (stream) {
       res.redirect(stream)
     } else {
-      res.sendStatus(404)
+      res.sendStatus(204)
     }
   } catch (err) {
     nxt(err)
