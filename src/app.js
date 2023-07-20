@@ -68,6 +68,19 @@ app.use(require('express-status-monitor')())
 //   nxt()
 // })
 
+app.use((req, res, nxt) => {
+  const user = {
+    url: req.url,
+    ip: req.headers['cf-connecting-ip'] || req.ip,
+    ua: req.headers['user-agent'],
+    country: req.headers['cf-ipcountry']
+  }
+
+  console.log(JSON.stringify(user))
+
+  nxt()
+})
+
 app.get('/channel/:id.m3u8', async (req, res, nxt) => {
   try {
     const url = `https://www.youtube.com/channel/${req.params.id}/live`
