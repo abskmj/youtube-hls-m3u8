@@ -19,7 +19,7 @@ const getLiveStream = async (url) => {
       if (response.ok) {
         const text = await response.text()
         const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/)?.[0]
-        const name = text.match(/(?<=channelName":")[^"]*/)?.[0]
+        const name = text.match(/(?<=ownerChannelName":")[^"]*/)?.[0]
         const logo = text.match(/(?<=owner":{"videoOwnerRenderer":{"thumbnail":{"thumbnails":\[{"url":")[^=]*/)?.[0]
 
         data = { name, stream, logo }
