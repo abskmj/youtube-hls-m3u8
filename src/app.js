@@ -12,15 +12,20 @@ const getLiveStream = async (url) => {
     return JSON.parse(data)
   } else {
     data = {}
-    const response = await fetch(url)
 
-    if (response.ok) {
-      const text = await response.text()
-      const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/)?.[0]
-      const name = text.match(/(?<=channelName":")[^"]*/)?.[0]
-      const logo = text.match(/(?<=owner":{"videoOwnerRenderer":{"thumbnail":{"thumbnails":\[{"url":")[^=]*/)?.[0]
+    try {
+      const response = await fetch(url)
 
-      data = { name, stream, logo }
+      if (response.ok) {
+        const text = await response.text()
+        const stream = text.match(/(?<=hlsManifestUrl":").*\.m3u8/)?.[0]
+        const name = text.match(/(?<=channelName":")[^"]*/)?.[0]
+        const logo = text.match(/(?<=owner":{"videoOwnerRenderer":{"thumbnail":{"thumbnails":\[{"url":")[^=]*/)?.[0]
+
+        data = { name, stream, logo }
+      }
+    } catch (error) {
+      console.log(error)
     }
 
     await cache.set(url, JSON.stringify(data), { EX: 300 })
