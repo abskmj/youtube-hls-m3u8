@@ -25,6 +25,11 @@ const getLiveStream = async (url) => {
         const logo = text.match(/(?<=owner":{"videoOwnerRenderer":{"thumbnail":{"thumbnails":\[{"url":")[^=]*/)?.[0]
 
         data = { name, stream, logo }
+      } else {
+        console.log(JSON.stringify({
+          url,
+          status: response.status
+        }))
       }
     } catch (error) {
       console.log(error)
@@ -68,18 +73,18 @@ app.use(require('express-status-monitor')())
 //   nxt()
 // })
 
-app.use((req, res, nxt) => {
-  const user = {
-    url: req.url,
-    ip: req.headers['cf-connecting-ip'] || req.ip,
-    ua: req.headers['user-agent'],
-    country: req.headers['cf-ipcountry']
-  }
+// app.use((req, res, nxt) => {
+//   const user = {
+//     url: req.url,
+//     ip: req.headers['cf-connecting-ip'] || req.ip,
+//     ua: req.headers['user-agent'],
+//     country: req.headers['cf-ipcountry']
+//   }
 
-  console.log(JSON.stringify(user))
+//   console.log(JSON.stringify(user))
 
-  nxt()
-})
+//   nxt()
+// })
 
 app.get('/channel/:id.m3u8', async (req, res, nxt) => {
   try {
