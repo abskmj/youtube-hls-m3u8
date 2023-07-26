@@ -8,7 +8,7 @@ const app = express()
 const reChannelName = /"owner":{"videoOwnerRenderer":{"thumbnail":{"thumbnails":\[.*?\]},"title":{"runs":\[{"text":"(.+?)"/
 
 const getLiveStream = async (url) => {
-  let data = await cache.get(url)
+  let data = await cache?.get(url)
 
   if (data) {
     return JSON.parse(data)
@@ -35,112 +35,56 @@ const getLiveStream = async (url) => {
       console.log(error)
     }
 
-    await cache.set(url, JSON.stringify(data), { EX: 300 })
+    await cache?.set(url, JSON.stringify(data), { EX: 300 })
 
     return data
   }
 }
 
-// const { GA_MEASUREMENT_ID, GA_API_SECRET, GA_CLIENT_ID } = process.env
-
-// const track = (user, event) => {
-//   return fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`, {
-//     method: 'POST',
-//     body: JSON.stringify({
-//       client_id: GA_CLIENT_ID,
-//       user_id: user.id,
-//       events: [event, {
-//         name: 'client',
-//         params: user.properties
-//       }]
-//     })
-//   })
-// }
-
 app.use(require('express-status-monitor')())
 
-// app.use((req, res, nxt) => {
-//   // console.log('headers:', req.headers)
-
-//   req.user = {
-//     id: req.headers['cf-connecting-ip'] || req.ip,
-//     properties: {
-//       country: req.headers['cf-ipcountry'],
-//       ua: req.headers['user-agent']
-//     }
-//   }
-
-//   nxt()
-// })
-
-// app.use((req, res, nxt) => {
-//   const user = {
-//     url: req.url,
-//     ip: req.headers['cf-connecting-ip'] || req.ip,
-//     ua: req.headers['user-agent'],
-//     country: req.headers['cf-ipcountry']
-//   }
-
-//   console.log(JSON.stringify(user))
-
-//   nxt()
-// })
+app.get('/', (req, res, nxt) => {
+  try {
+    res.json({ message: 'Status OK' })
+  } catch (err) {
+    nxt(err)
+  }
+})
 
 app.get('/channel/:id.m3u8', async (req, res, nxt) => {
   try {
     const url = `https://www.youtube.com/channel/${req.params.id}/live`
-    const { name, stream } = await getLiveStream(url)
-
-    // await track(req.user, {
-    //   name: 'feed',
-    //   params: {
-    //     engagement_time_msec: '1',
-    //     name
-    //   }
-    // })
+    const { stream } = await getLiveStream(url)
 
     if (stream) {
       res.redirect(stream)
     } else {
       res.sendStatus(204)
     }
-  } catch (err) {
-    nxt(err)
-  }
+  } catch (err) { nxt(err) }
 })
 
 app.get('/video/:id.m3u8', async (req, res, nxt) => {
   try {
     const url = `https://www.youtube.com/watch?v=${req.params.id}`
-    const { name, stream } = await getLiveStream(url)
-
-    // await track(req.user, {
-    //   name: 'feed',
-    //   params: {
-    //     engagement_time_msec: '1',
-    //     name
-    //   }
-    // })
+    const { stream } = await getLiveStream(url)
 
     if (stream) {
       res.redirect(stream)
     } else {
       res.sendStatus(204)
     }
-  } catch (err) {
-    nxt(err)
-  }
+  } catch (err) { nxt(err) }
 })
 
 app.get('/cache', async (req, res, nxt) => {
   try {
-    const keys = await cache.keys('*')
-    // console.log('Keys:', keys)
+    const keys = await cache?.keys('*')
 
     const items = []
 
     for (const key of keys) {
-      const data = JSON.parse(await cache.get(key))
+      const data = JSON.parse(await cache?.get(key))
 
       if (data) {
         items.push({
@@ -152,12 +96,11 @@ app.get('/cache', async (req, res, nxt) => {
     }
 
     res.json(items)
-  } catch (err) {
-    nxt(err)
-  }
+  } catch (err) { nxt(err) }
 })
 
-app.listen(3000, () => {
-  console.log('express app is running on port 3000')
-  console.log(process.version)
+const port = process.env.PORT || 8080
+
+app.listen(port, () => {
+  console.log(`express app (node ${process.version}) is running on port ${port}`)
 })
