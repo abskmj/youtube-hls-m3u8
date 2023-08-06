@@ -1,18 +1,4 @@
-const redis = require('redis')
+const NodeCache = require("node-cache");
+const cache = new NodeCache();
 
-let client;
-
-(async () => {
-  const { REDIS_URL } = process.env
-
-  // initilize client if url is set
-  if (REDIS_URL) {
-    client = redis.createClient({ url: REDIS_URL })
-
-    client.on('error', (error) => console.error(`Error : ${error}`))
-
-    await client.connect()
-  }
-})()
-
-module.exports = client
+module.exports = cache;
