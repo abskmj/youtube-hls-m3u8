@@ -10,10 +10,10 @@ It picks up the live feed of a YouTube channel. It works well when a YouTube cha
 
 ```bash
 # format of the link
-https://ythls-v2.onrender.com/channel/$youtube_channel_id.m3u8
+https://ythls-v3.onrender.com/channel/$youtube_channel_id.m3u8
 
 # example
-https://ythls-v2.onrender.com/channel/UCt4t-jeY85JegMlZ-E5UWtA.m3u8
+https://ythls-v3.onrender.com/channel/UCt4t-jeY85JegMlZ-E5UWtA.m3u8
 ```
 
 ## For a Youtube Video
@@ -21,10 +21,10 @@ It picks up the live feed of a YouTube video. The video should be live for it to
 
 ```bash
 # format of the link
-https://ythls-v2.onrender.com/video/$youtube_video_id.m3u8
+https://ythls-v3.onrender.com/video/$youtube_video_id.m3u8
 
 # example
-https://ythls-v2.onrender.com/video/Nq2wYlWFucg.m3u8
+https://ythls-v3.onrender.com/video/Nq2wYlWFucg.m3u8
 ```
 
 # Support
